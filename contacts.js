@@ -11,8 +11,10 @@ export async function listContacts() {
     // ...твій код. Повертає масив контактів.
 
     const readResult = await fs.readFile(contactsPath);
-    const contactsParse = JSON.parse(readResult);
-    console.table(contactsParse);
+    // const contactsParse = JSON.parse(readResult);
+    // console.table(contactsParse);
+
+    return JSON.parse(readResult);
   } catch (err) {
     console.log(err);
   }
@@ -23,13 +25,15 @@ export async function getContactById(contactId) {
   try {
     // ...твій код. Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
 
-    const readResult = await fs.readFile(contactsPath);
-    const contactsParse = JSON.parse(readResult);
+    // const readResult = await fs.readFile(contactsPath);
+    // const contactsParse = JSON.parse(readResult);
 
-    const filterContacts = contactsParse.filter((user) => {
-      return user.id === contactId ? user : null;
-    });
-    console.table(filterContacts);
+    const contactsParse = await listContacts();
+
+    const filterContacts = contactsParse.filter(
+      (user) => user.id === contactId
+    );
+    return filterContacts ? console.table(filterContacts) : console.table(null);
   } catch (err) {
     console.log(err);
   }
@@ -43,8 +47,10 @@ export async function addContact(name, email, phone) {
 
     const createContact = { id: nanoid(), name, email, phone };
 
-    const readResult = await fs.readFile(contactsPath);
-    const contactsParse = JSON.parse(readResult);
+    // const readResult = await fs.readFile(contactsPath);
+    // const contactsParse = JSON.parse(readResult);
+
+    const contactsParse = await listContacts();
 
     const newContactsObj = [...contactsParse, createContact];
     await fs.writeFile(contactsPath, JSON.stringify(newContactsObj));
@@ -60,13 +66,17 @@ export async function removeContact(contactId) {
   try {
     // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
 
-    const readResult = await fs.readFile(contactsPath);
-    const contactsParse = JSON.parse(readResult);
+    // const readResult = await fs.readFile(contactsPath);
+    // const contactsParse = JSON.parse(readResult);
 
-    const filterContacts = contactsParse.filter((user) => {
-      return user.id === contactId ? user : null;
-    });
-    console.table(filterContacts);
+    const contactsParse = await listContacts(contactId);
+
+    // const filterContacts = contactsParse.filter(
+    //   (user) => user.id === contactId
+    // );
+    // return filterContacts ? console.table(filterContacts) : console.table(null);
+
+    await getContactById(contactId);
 
     const filteredContacts = contactsParse.filter(
       (user) => user.id !== contactId
