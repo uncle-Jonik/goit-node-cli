@@ -23,22 +23,44 @@ async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
       // ...
-      listContacts();
+      //node index.js -a list
+
+      console.table(await listContacts());
       break;
 
     case "get":
       // ... id
-      getContactById(id);
+      //node index.js -a get -i 05olLMgyVQdWRwgKfg5J6
+
+      if (!id) {
+        console.log("The ID field is required. Please try again.");
+        break;
+      }
+
+      console.table(await getContactById(id));
       break;
 
     case "add":
       // ... name email phone
-      addContact(name, email, phone);
+      //node index.js -a add -n Mango -e mango@gmail.com -p 322-22-22
+      if (!name && !email && !phone) {
+        console.log(
+          "The name/email/phone field is required. Please try again."
+        );
+        break;
+      }
+
+      console.table(await addContact(name, email, phone));
       break;
 
     case "remove":
       // ... id
-      removeContact(id);
+      //node index.js -a remove -i qdggE76Jtbfd9eWJHrssH
+      if (!id) {
+        console.log("The ID field is required. Please try again.");
+        break;
+      }
+      console.table(await removeContact(id));
       break;
 
     default:
